@@ -2,70 +2,33 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Eleição 2026 — Apuração</title>
 <style>
 *{box-sizing:border-box}
 body{font-family:Inter,Arial,sans-serif;margin:0;background:#f3f6f4;color:#17202a}
 .app{max-width:1180px;margin:auto;padding:18px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.top h1{margin:0 0 4px;font-size:30px}
-.status{padding:9px 12px;border-radius:20px;background:#e7f6ed;color:#08783b;font-weight:bold;font-size:12px}
-.toolbar{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}
-.toolbar select{min-width:270px}
-select,button{padding:12px;border:1px solid #ccd7d1;border-radius:9px;background:#fff;font-size:15px}
-button{background:#08783b;color:#fff;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
-.card,.region{background:#fff;border:1px solid #dce4df;border-radius:15px;padding:16px;margin-bottom:14px}
-.big{font-size:58px;font-weight:900}
-.bar{height:12px;background:#e5eae7;border-radius:20px;overflow:hidden;margin:10px 0}
-.fill{height:100%;background:#08783b;width:0;transition:width .35s}
-.stats,.states{display:flex;gap:8px;flex-wrap:wrap}
-.stat{background:#f5f8f6;padding:10px;border-radius:9px;min-width:130px}
-.stat b{display:block}
-.regions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.states{margin-top:8px}
-.state{padding:7px 9px;font-size:11px;color:#08783b;background:#f7faf8}
-.cands{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.cand{display:flex;gap:10px;border:1px solid #dce4df;border-radius:11px;padding:9px;align-items:center}
-.photo{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#e7ece9;flex:0 0 auto}
-.pct{font-size:19px;font-weight:900;color:#08783b}
-.muted{color:#68777a;font-size:12px}
+.top h1{margin:0 0 4px;font-size:30px}.status{padding:9px 12px;border-radius:20px;background:#e7f6ed;color:#08783b;font-weight:bold;font-size:12px}
+.toolbar{display:flex;gap:8px;margin:18px 0;flex-wrap:wrap}.toolbar select{min-width:270px}
+select,button{padding:12px;border:1px solid #ccd7d1;border-radius:9px;background:#fff;font-size:15px}button{background:#08783b;color:#fff;font-weight:bold;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+.card,.region,.chart-card{background:#fff;border:1px solid #dce4df;border-radius:15px;padding:16px;margin-bottom:14px}
+.big{font-size:58px;font-weight:900}.bar{height:12px;background:#e5eae7;border-radius:20px;overflow:hidden;margin:10px 0}.fill{height:100%;background:#08783b;width:0;transition:width .35s}
+.stats,.states{display:flex;gap:8px;flex-wrap:wrap}.stat{background:#f5f8f6;padding:10px;border-radius:9px;min-width:130px}.stat b{display:block}
+.regions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.states{margin-top:8px}.state{padding:7px 9px;font-size:11px;color:#08783b;background:#f7faf8}
+.cands{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.cand{display:flex;gap:10px;border:1px solid #dce4df;border-radius:11px;padding:9px;align-items:center}.photo{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#e7ece9}.pct{font-size:19px;font-weight:900;color:#08783b}.muted{color:#68777a;font-size:12px}
 .err{display:none;background:#fff0f0;color:#a00;padding:10px;border-radius:9px;margin-top:10px}
-.top-charts{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.85fr);gap:14px;margin:0 0 14px}
-.chart-card{background:#fff;border:1px solid #dce4df;border-radius:15px;padding:16px;min-width:0}
-.chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
-.chart-title{font-size:17px;font-weight:800;margin:0}
-.chart-sub{font-size:11px;color:#68777a;margin-top:4px}
-.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#68777a;margin:8px 0}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
-.map-wrap{height:355px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#eef1f0;border:1px solid #d1d6d4;border-radius:12px}
-.map-wrap svg{width:100%;height:100%}
-.map-state{stroke:#59636a;stroke-width:1.15;cursor:pointer;transition:filter .15s,stroke-width .15s}
-.map-state:hover{filter:brightness(.92);stroke:#20282d;stroke-width:1.8}
-.map-label{font-size:8px;font-weight:800;fill:#fff;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:#343b40;stroke-width:2px}
-.map-empty{font-size:13px;color:#68777a;text-align:center;padding:20px}
-.map-note{font-size:10px;color:#68777a;margin-top:7px}
-.tooltip{position:fixed;z-index:20;pointer-events:none;background:#17202a;color:#fff;padding:8px 10px;border-radius:8px;font-size:11px;display:none;max-width:230px;box-shadow:0 5px 18px rgba(0,0,0,.18)}
-.bars{display:flex;flex-direction:column;gap:12px;padding-top:8px}
-.bar-item{width:100%;min-width:0}
-.bar-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
-.bar-name{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.bar-pct{font-size:12px;font-weight:900;white-space:nowrap}
-.bar-track{height:18px;background:#edf1ef;border-radius:7px;overflow:hidden;width:100%}
-.bar-value{height:100%;background:#08783b;border-radius:7px;min-width:2px;transition:width .35s}
-.bar-votes{font-size:10px;color:#68777a;margin-top:4px;text-align:right}
-.no-data{padding:35px 8px;text-align:center;color:#68777a;font-size:12px}
-.footer{margin:18px 0 6px;text-align:center}
-.source{font-size:11px;color:#68777a}
-@media(max-width:800px){
-  .top-charts{grid-template-columns:1fr}
-  .map-wrap{height:310px}
-  .regions,.cands{grid-template-columns:1fr}
-  .big{font-size:44px}
-  .toolbar select{min-width:0;flex:1}
-  .toolbar button{flex:1}
-}
+.top-charts{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.85fr);gap:14px;margin:0 0 14px}.chart-card{min-width:0;margin-bottom:0}
+.chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}.chart-title{font-size:17px;font-weight:800;margin:0}.chart-sub{font-size:11px;color:#68777a;margin-top:4px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#68777a;margin:9px 0}.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.map-frame{background:#e1e5e6;border:1px solid #c8ced0;border-radius:10px;overflow:hidden}.map-wrap{height:390px;width:100%;display:flex;align-items:center;justify-content:center}.map-wrap svg{width:100%;height:100%;display:block}.map-state{cursor:pointer;transition:filter .15s,opacity .15s}.map-state:hover{filter:brightness(.88)}
+.map-label{font-size:9px;font-weight:800;fill:#fff;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:#344047;stroke-width:2.4px;stroke-linejoin:round}
+.map-note{font-size:10px;color:#68777a;margin-top:6px}.map-empty{font-size:13px;color:#68777a;text-align:center;padding:20px}
+.bars{display:flex;flex-direction:column;gap:15px;padding-top:8px}.bar-item{display:grid;grid-template-columns:minmax(105px,125px) 1fr 58px;grid-template-rows:22px 18px;column-gap:8px;row-gap:3px;align-items:center}.bar-name{font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1}.bar-track{height:18px;background:#edf1ef;border-radius:7px;overflow:hidden;grid-column:2}.bar-value{height:100%;background:#08783b;border-radius:7px;min-width:2px;transition:width .35s}.bar-pct{font-size:11px;font-weight:900;text-align:right;grid-column:3}.bar-votes{font-size:10px;color:#68777a;grid-column:1 / 4;padding-left:2px}
+.no-data{padding:35px 8px;text-align:center;color:#68777a;font-size:12px}.footer{margin:18px 0 6px;text-align:center}.source{font-size:11px;color:#68777a}
+.tooltip{position:fixed;z-index:20;pointer-events:none;background:#17202a;color:#fff;padding:8px 10px;border-radius:8px;font-size:11px;display:none;max-width:220px;box-shadow:0 5px 18px rgba(0,0,0,.18)}
+@media(max-width:800px){.top-charts{grid-template-columns:1fr}.map-wrap{height:330px}.regions,.cands{grid-template-columns:1fr}.big{font-size:44px}.bar-item{grid-template-columns:100px 1fr 55px}.toolbar select{min-width:0;flex:1}.toolbar button{flex:1}}
+@media(max-width:430px){.app{padding:12px}.chart-card,.card{padding:13px}.map-wrap{height:315px}.bar-item{grid-template-columns:88px 1fr 52px}.bar-name{font-size:10px}.bar-pct{font-size:10px}}
 </style>
 </head>
 <body>
@@ -74,176 +37,62 @@ button:disabled{opacity:.6;cursor:wait}
   <div><h1>🇧🇷 Eleição 2026</h1><div class="muted">Apuração eleitoral</div></div>
   <div id="status" class="status">PRONTO PARA ATUALIZAR</div>
 </header>
-
 <div class="toolbar">
-  <select id="cargo" aria-label="Cargo">
-    <option value="presidente">Presidente</option>
-    <option value="governador">Governador</option>
-    <option value="senador">Senador</option>
-    <option value="depfed">Deputado Federal</option>
-    <option value="depest">Deputado Estadual/Distrital</option>
-  </select>
+  <select id="cargo" aria-label="Cargo"><option value="presidente">Presidente</option><option value="governador">Governador</option><option value="senador">Senador</option><option value="depfed">Deputado Federal</option><option value="depest">Deputado Estadual/Distrital</option></select>
   <button id="update">🔄 Atualizar apuração</button>
 </div>
-
 <section class="top-charts">
   <article class="chart-card">
-    <div class="chart-head">
-      <div>
-        <h2 class="chart-title">Mapa do Brasil — líder por estado</h2>
-        <div class="chart-sub">Vermelho na metade norte e azul na metade sul. A intensidade indica a porcentagem do líder.</div>
-      </div>
-    </div>
-    <div class="legend">
-      <span><i style="background:#dc2626"></i>Norte + Nordeste</span>
-      <span><i style="background:#2563eb"></i>Sudeste + Sul</span>
-    </div>
-    <div id="map" class="map-wrap"><div class="map-empty">Aperte Atualizar apuração para carregar o mapa.</div></div>
-    <div class="map-note">O Centro-Oeste foi retirado deste mapa. Clique em um estado para consultar os candidatos daquela UF.</div>
+    <div class="chart-head"><div><h2 class="chart-title">Mapa do Brasil — líder por estado</h2><div class="chart-sub">Vermelho: Norte + Nordeste · Azul: Sudeste + Sul. A intensidade indica a porcentagem do líder na UF.</div></div></div>
+    <div class="legend"><span><i style="background:#dc2626"></i>Norte + Nordeste</span><span><i style="background:#2563eb"></i>Sudeste + Sul</span></div>
+    <div class="map-frame"><div id="map" class="map-wrap"><div class="map-empty">Aperte Atualizar apuração para carregar o mapa.</div></div></div>
+    <div class="map-note">Clique em um estado para consultar os candidatos daquela UF.</div>
   </article>
-
   <article class="chart-card">
-    <div class="chart-head">
-      <div>
-        <h2 class="chart-title">Votação por candidato</h2>
-        <div id="barSub" class="chart-sub">Ranking nacional</div>
-      </div>
-    </div>
+    <div class="chart-head"><div><h2 class="chart-title">Votação por candidato</h2><div id="barSub" class="chart-sub">Ranking nacional</div></div></div>
     <div id="bars" class="bars"><div class="no-data">Aperte Atualizar apuração.</div></div>
   </article>
 </section>
-
 <section class="card">
-  <div class="muted">APURAÇÃO GERAL — BRASIL</div>
-  <div id="progress" class="big">—</div>
-  <div class="bar"><div id="fill" class="fill"></div></div>
-  <div class="stats">
-    <div class="stat"><b id="votes">—</b><span class="muted">votos válidos</span></div>
-    <div class="stat"><b id="sections">—</b><span class="muted">seções</span></div>
-    <div class="stat"><b id="updated">—</b><span class="muted">atualização</span></div>
-  </div>
+  <div class="muted">APURAÇÃO GERAL — BRASIL</div><div id="progress" class="big">—</div><div class="bar"><div id="fill" class="fill"></div></div>
+  <div class="stats"><div class="stat"><b id="votes">—</b><span class="muted">votos válidos</span></div><div class="stat"><b id="sections">—</b><span class="muted">seções</span></div><div class="stat"><b id="updated">—</b><span class="muted">atualização</span></div></div>
   <div id="err" class="err"></div>
 </section>
-
 <section class="card"><h2>Candidatos</h2><div id="cands" class="cands"><div class="muted">Aperte Atualizar apuração.</div></div></section>
 <section id="regions" class="regions"></section>
 <p class="footer"><strong>Deus acima de todos, Brasil, acima de todo.</strong><br><span class="source">Fonte dos resultados: Tribunal Superior Eleitoral (TSE)</span></p>
 </main>
 <div id="tooltip" class="tooltip"></div>
-
 <script>
 const regions={Norte:['AC','AP','AM','PA','RO','RR','TO'],Nordeste:['AL','BA','CE','MA','PB','PE','PI','RN','SE'],Centro_Oeste:['DF','GO','MT','MS'],Sudeste:['ES','MG','RJ','SP'],Sul:['PR','RS','SC']};
 const names={AC:'Acre',AL:'Alagoas',AP:'Amapá',AM:'Amazonas',BA:'Bahia',CE:'Ceará',DF:'Distrito Federal',ES:'Espírito Santo',GO:'Goiás',MA:'Maranhão',MT:'Mato Grosso',MS:'Mato Grosso do Sul',MG:'Minas Gerais',PA:'Pará',PB:'Paraíba',PR:'Paraná',PE:'Pernambuco',PI:'Piauí',RJ:'Rio de Janeiro',RN:'Rio Grande do Norte',RS:'Rio Grande do Sul',RO:'Rondônia',RR:'Roraima',SC:'Santa Catarina',SP:'São Paulo',SE:'Sergipe',TO:'Tocantins'};
-const $=id=>document.getElementById(id);
-const stateData={};
-let d3mod=null,geojson=null;
-
-function renderRegions(){
-  $('regions').innerHTML=Object.entries(regions).map(([r,us])=>`<div class="region"><b>${r.replace('_','-')}</b><div class="states">${us.map(u=>`<button class="state" data-uf="${u}">${u}</button>`).join('')}</div><div class="muted" id="r-${r}">—</div></div>`).join('');
-}
-
-function renderCandidates(cs,label='Brasil'){
-  $('cands').innerHTML=cs?.length?cs.map(c=>`<article class="cand">${c.photo?`<img class="photo" src="${c.photo}" loading="lazy" alt="Foto de ${c.name}">`:`<div class="photo"></div>`}<div><b>${c.name}</b><div class="muted">${c.number?'Nº '+c.number+' · ':''}${c.party||'Partido não informado'}</div><div class="pct">${Number(c.percent||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%</div><div class="muted">${Number(c.votes||0).toLocaleString('pt-BR')} votos · ${label}</div></div></article>`).join(''):'<div class="muted">Nenhum candidato retornado pelo TSE.</div>';
-}
-
-function leader(d){return (d?.candidates||[]).reduce((a,b)=>!a||Number(b.votes||0)>Number(a.votes||0)?b:a,null)}
-
-// Apenas as duas metades solicitadas: norte/nordeste em vermelho e sudeste/sul em azul.
-function mapColor(uf){
-  if(regions.Norte.includes(uf)||regions.Nordeste.includes(uf))return '#dc2626';
-  if(regions.Sudeste.includes(uf)||regions.Sul.includes(uf))return '#2563eb';
-  return null;
-}
-
-function api(uf=''){
-  const cargoVal=$('cargo').value;
-  const url=`/api/tse?cargo=${encodeURIComponent(cargoVal)}${uf?'&uf='+uf:''}&t=${Date.now()}`;
-  return fetch(url,{cache:'no-store'}).then(async r=>{const j=await r.json().catch(()=>({error:'Resposta inválida da API'}));if(!r.ok)throw Error(j.error||`HTTP ${r.status}`);return j});
-}
-
+const redUF=new Set([...regions.Norte,...regions.Nordeste]);
+const $=id=>document.getElementById(id);const stateData={};let d3mod=null;let geojson=null;
+function renderRegions(){$('regions').innerHTML=Object.entries(regions).map(([r,us])=>`<div class="region"><b>${r.replace('_','-')}</b><div class="states">${us.map(u=>`<button class="state" data-uf="${u}">${u}</button>`).join('')}</div><div class="muted" id="r-${r}">—</div></div>`).join('')}
+function renderCandidates(cs,label='Brasil'){$('cands').innerHTML=cs?.length?cs.map(c=>`<article class="cand">${c.photo?`<img class="photo" src="${c.photo}" loading="lazy" alt="Foto de ${c.name}">`:`<div class="photo"></div>`}<div><b>${c.name}</b><div class="muted">${c.number?'Nº '+c.number+' · ':''}${c.party||'Partido não informado'}</div><div class="pct">${Number(c.percent||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%</div><div class="muted">${Number(c.votes||0).toLocaleString('pt-BR')} votos · ${label}</div></div></article>`).join(''):'<div class="muted">Nenhum candidato retornado pelo TSE.</div>'}
+function leader(d){return(d?.candidates||[]).reduce((a,b)=>!a||Number(b.votes||0)>Number(a.votes||0)?b:a,null)}
+function regionColor(uf){return redUF.has(uf)?'#dc2626':'#2563eb'}
+function opacityFor(d){const l=leader(d);return l?Math.max(.28,Math.min(1,.28+Number(l.percent||0)/100*.72)):.18}
+async function api(uf=''){const cargoVal=$('cargo').value;const url=`/api/tse?cargo=${encodeURIComponent(cargoVal)}${uf?'&uf='+uf:''}&t=${Date.now()}`;const r=await fetch(url,{cache:'no-store'});const j=await r.json().catch(()=>({error:'Resposta inválida da API'}));if(!r.ok)throw Error(j.error||`HTTP ${r.status}`);return j}
+function getUF(f){const p=f.properties||{};return String(p.sigla||p.SIGLA||p.uf||p.UF||f.id||'').toUpperCase()}
 async function loadMap(){
-  if(!d3mod)d3mod=await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
-  if(!geojson){
-    const r=await fetch('https://cdn.jsdelivr.net/gh/henriquemalvar/br-geojson@main/dist/estados.geojson',{cache:'force-cache'});
-    if(!r.ok)throw Error('Não foi possível carregar a geometria dos estados');
-    geojson=await r.json();
-  }
-  const d3=d3mod,box=$('map'),width=Math.max(300,box.clientWidth),height=Math.max(260,box.clientHeight);
-  box.innerHTML='';
-  // Remove Centro-Oeste do desenho, mantendo somente os 23 estados das duas metades pedidas.
-  const features=geojson.features.filter(f=>mapColor(f.properties.sigla));
-  const collection={type:'FeatureCollection',features};
-  const svg=d3.select(box).append('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('role','img').attr('aria-label','Mapa do Brasil com estados do Norte, Nordeste, Sudeste e Sul');
-  const projection=d3.geoMercator().fitSize([width-16,height-16],collection);
-  const path=d3.geoPath(projection);
-  const g=svg.append('g');
-  g.selectAll('path').data(features).join('path')
-    .attr('class','map-state')
-    .attr('d',path)
-    .attr('fill',f=>mapColor(f.properties.sigla))
-    .attr('fill-opacity',f=>{
-      const uf=f.properties.sigla,d=stateData[uf],l=leader(d);
-      return d&&l?Math.max(.38,Math.min(1,.34+Number(l.percent||0)/100*.66)):.22;
-    })
-    .on('click',async(event,f)=>selectState(f.properties.sigla))
-    .on('pointermove',(event,f)=>{
-      const uf=f.properties.sigla,d=stateData[uf],l=leader(d),pct=l?Number(l.percent||0):0;
-      $('tooltip').innerHTML=`<strong>${uf} — ${names[uf]}</strong><br>${l?`${l.name}<br><b>${pct.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%</b> · ${Number(l.votes||0).toLocaleString('pt-BR')} votos`:'Sem dados ainda'}`;
-      $('tooltip').style.display='block';$('tooltip').style.left=(event.clientX+12)+'px';$('tooltip').style.top=(event.clientY+12)+'px';
-    })
-    .on('pointerleave',()=>{$('tooltip').style.display='none'});
-  g.selectAll('text').data(features).join('text').attr('class','map-label').attr('x',f=>path.centroid(f)[0]).attr('y',f=>path.centroid(f)[1]+3).text(f=>f.properties.sigla);
+ if(!d3mod)d3mod=await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
+ if(!geojson){const urls=['https://raw.githubusercontent.com/henriquemalvar/br-geojson/main/dist/estados.geojson','https://cdn.jsdelivr.net/gh/henriquemalvar/br-geojson@main/dist/estados.geojson'];let last;for(const u of urls){try{const r=await fetch(u,{cache:'force-cache'});if(r.ok){geojson=await r.json();break}last=Error('HTTP '+r.status)}catch(e){last=e}}if(!geojson)throw last||Error('Não foi possível carregar o mapa')}
+ const d3=d3mod,box=$('map'),width=Math.max(300,box.clientWidth),height=Math.max(280,box.clientHeight);box.innerHTML='';
+ const svg=d3.select(box).append('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('role','img').attr('aria-label','Mapa do Brasil por estado');
+ const projection=d3.geoMercator().fitExtent([[8,8],[width-8,height-8]],geojson),path=d3.geoPath(projection),g=svg.append('g');
+ const features=geojson.features||[];
+ g.selectAll('path').data(features).join('path').attr('class','map-state').attr('d',path).attr('fill',f=>regionColor(getUF(f))).attr('fill-opacity',f=>opacityFor(stateData[getUF(f)])).attr('stroke','#4b5563').attr('stroke-width',1.25).attr('stroke-linejoin','round')
+ .on('click',async(event,f)=>selectState(getUF(f)))
+ .on('pointermove',(event,f)=>{const uf=getUF(f),d=stateData[uf],l=leader(d),pct=l?Number(l.percent||0):0;$('tooltip').innerHTML=`<strong>${uf} — ${names[uf]||uf}</strong><br>${l?`${l.name}<br><b>${pct.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%</b> · ${Number(l.votes||0).toLocaleString('pt-BR')} votos`:'Sem dados ainda'}`;$('tooltip').style.display='block';$('tooltip').style.left=(event.clientX+12)+'px';$('tooltip').style.top=(event.clientY+12)+'px'})
+ .on('pointerleave',()=>{$('tooltip').style.display='none'});
+ g.selectAll('text').data(features).join('text').attr('class','map-label').attr('x',f=>path.centroid(f)[0]).attr('y',f=>path.centroid(f)[1]+3).text(f=>getUF(f));
 }
-
-function renderBars(cs){
-  const box=$('bars');
-  if(!cs?.length){box.innerHTML='<div class="no-data">Nenhum resultado disponível.</div>';return;}
-  const top=cs.slice(0,8),max=Math.max(...top.map(c=>Number(c.votes||0)),1);
-  $('barSub').textContent=`Top ${top.length} — ${$('cargo').selectedOptions[0].text}`;
-  box.innerHTML=top.map(c=>{
-    const p=Number(c.percent||0),w=(Number(c.votes||0)/max)*100;
-    return `<div class="bar-item">
-      <div class="bar-head"><div class="bar-name" title="${c.name}">${c.name}</div><div class="bar-pct">${p.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%</div></div>
-      <div class="bar-track"><div class="bar-value" style="width:${w}%"></div></div>
-      <div class="bar-votes">${Number(c.votes||0).toLocaleString('pt-BR')} votos</div>
-    </div>`;
-  }).join('');
-}
-
-async function selectState(uf){
-  try{
-    const d=stateData[uf]||await api(uf);stateData[uf]=d;
-    renderCandidates(d.candidates,names[uf]);$('err').style.display='none';
-  }catch(e){$('err').textContent='Não foi possível carregar '+names[uf]+': '+e.message;$('err').style.display='block';}
-}
-
-async function update(){
-  const b=$('update');b.disabled=true;$('status').textContent='ATUALIZANDO…';$('err').style.display='none';
-  try{
-    const d=await api();
-    Object.keys(d.states||{}).forEach(uf=>stateData[uf]=d.states[uf]);
-    const pct=Number(d.progress||0);
-    $('progress').textContent=pct.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
-    $('fill').style.width=Math.max(0,Math.min(100,pct))+'%';
-    $('votes').textContent=Number(d.validVotes||0).toLocaleString('pt-BR');
-    $('sections').textContent=`${Number(d.countedSections||0).toLocaleString('pt-BR')} / ${Number(d.totalSections||0).toLocaleString('pt-BR')}`;
-    $('updated').textContent=d.updatedAt?new Date(d.updatedAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'—';
-    renderCandidates(d.candidates||[],'Brasil');
-    renderBars(d.candidates||[]);
-    Object.entries(regions).forEach(([r,us])=>{
-      const vals=us.map(u=>stateData[u]).filter(Boolean),avg=vals.length?vals.reduce((s,x)=>s+Number(x.progress||0),0)/vals.length:0;
-      const el=$('r-'+r);if(el)el.textContent=vals.length?`Progresso médio: ${avg.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`:'—';
-    });
-    await loadMap();
-    $('status').textContent='ATUALIZADO';
-  }catch(e){$('status').textContent='ERRO NA ATUALIZAÇÃO';$('err').textContent='Não foi possível obter os dados reais: '+e.message;$('err').style.display='block';}
-  finally{b.disabled=false;}
-}
-
-renderRegions();
-$('update').addEventListener('click',update);
-$('cargo').addEventListener('change',()=>{Object.keys(stateData).forEach(k=>delete stateData[k]);$('status').textContent='PRONTO PARA ATUALIZAR';$('bars').innerHTML='<div class="no-data">Aperte Atualizar apuração.</div>';$('map').innerHTML='<div class="map-empty">Aperte Atualizar apuração para carregar o mapa.</div>';});
-$('regions').addEventListener('click',e=>{const b=e.target.closest('[data-uf]');if(b)selectState(b.dataset.uf)});
+function refreshMap(){if(!geojson)return;const d3=d3mod,box=$('map'),svg=d3.select(box).select('svg');if(svg.empty())return;const width=Math.max(300,box.clientWidth),height=Math.max(280,box.clientHeight),projection=d3.geoMercator().fitExtent([[8,8],[width-8,height-8]],geojson),path=d3.geoPath(projection);svg.attr('viewBox',`0 0 ${width} ${height}`);svg.selectAll('path').attr('d',path).attr('fill-opacity',f=>opacityFor(stateData[getUF(f)]));svg.selectAll('text').attr('x',f=>path.centroid(f)[0]).attr('y',f=>path.centroid(f)[1]+3)}
+function renderBars(cs){const box=$('bars');if(!cs?.length){box.innerHTML='<div class="no-data">Nenhum resultado disponível.</div>';return}const top=cs.slice(0,8),max=Math.max(...top.map(c=>Number(c.votes||0)),1);$('barSub').textContent=`Top ${top.length} — ${$('cargo').selectedOptions[0].text}`;box.innerHTML=top.map(c=>{const p=Number(c.percent||0),w=(Number(c.votes||0)/max)*100;return `<div class="bar-item"><div class="bar-name" title="${c.name}">${c.name}</div><div class="bar-track"><div class="bar-value" style="width:${w}%"></div></div><div class="bar-pct">${p.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%</div><div class="bar-votes">${Number(c.votes||0).toLocaleString('pt-BR')} votos</div></div>`}).join('')}
+async function selectState(uf){if(!uf)return;try{const d=stateData[uf]||await api(uf);stateData[uf]=d;renderCandidates(d.candidates,names[uf]);refreshMap();$('err').style.display='none'}catch(e){$('err').textContent='Não foi possível carregar '+(names[uf]||uf)+': '+e.message;$('err').style.display='block'}}
+async function update(){const b=$('update');b.disabled=true;$('status').textContent='ATUALIZANDO…';$('err').style.display='none';try{const d=await api();Object.keys(d.states||{}).forEach(uf=>stateData[uf]=d.states[uf]);$('progress').textContent=(Number(d.progress||0)).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';$('fill').style.width=Math.max(0,Math.min(100,Number(d.progress||0)))+'%';$('votes').textContent=Number(d.validVotes||0).toLocaleString('pt-BR');$('sections').textContent=Number(d.countedSections||0).toLocaleString('pt-BR')+' / '+Number(d.totalSections||0).toLocaleString('pt-BR');$('updated').textContent=d.updatedAt||new Date().toLocaleTimeString('pt-BR');renderCandidates(d.candidates,'Brasil');renderBars(d.candidates||[]);Object.entries(regions).forEach(([r,us])=>{const vals=us.map(u=>d.states?.[u]).filter(Boolean);const counted=vals.reduce((a,x)=>a+Number(x.countedSections||0),0),total=vals.reduce((a,x)=>a+Number(x.totalSections||0),0);const el=$('r-'+r);if(el)el.textContent=`${total?((counted/total)*100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'0,00'}% das seções apuradas`});await loadMap();refreshMap();$('status').textContent='ATUALIZADO'}catch(e){$('status').textContent='ERRO NA ATUALIZAÇÃO';$('err').textContent='Não foi possível obter os dados: '+e.message;$('err').style.display='block'}finally{b.disabled=false}}
+renderRegions();$('update').addEventListener('click',update);$('cargo').addEventListener('change',()=>{Object.keys(stateData).forEach(k=>delete stateData[k]);$('status').textContent='PRONTO PARA ATUALIZAR';$('bars').innerHTML='<div class="no-data">Aperte Atualizar apuração.</div>';$('map').innerHTML='<div class="map-empty">Aperte Atualizar apuração para carregar o mapa.</div>'});document.addEventListener('click',e=>{const btn=e.target.closest('.state');if(btn)selectState(btn.dataset.uf)});window.addEventListener('resize',()=>refreshMap());
 </script>
 </body>
 </html>
