@@ -32,14 +32,8 @@ function parse(j, cargo, uf) {
   const s = j?.s || {};
   const v = j?.v || {};
   const e = j?.e || {};
-
-  const total = num(s.ts);
-  const count = num(s.st);
-  const valid = num(v.vv);
-  const generatedDate = text(j?.dg);
-  const generatedTime = text(j?.hg);
-
   const candidates = [];
+
   for (const cg of (Array.isArray(j?.carg) ? j.carg : [])) {
     for (const ag of (Array.isArray(cg?.agr) ? cg.agr : [])) {
       for (const pa of (Array.isArray(ag?.par) ? ag.par : [])) {
@@ -66,10 +60,10 @@ function parse(j, cargo, uf) {
   }
 
   return {
-    total,
-    count,
-    valid,
-    generatedAt: generatedDate || generatedTime ? `${generatedDate} ${generatedTime}`.trim() : '',
+    total: num(s.ts),
+    count: num(s.st),
+    valid: num(v.vv),
+    generatedAt: text(j?.dg) || text(j?.hg) ? `${text(j?.dg)} ${text(j?.hg)}`.trim() : '',
     electorate: num(e.te),
     electorateCounted: num(e.est),
     candidates
@@ -83,7 +77,7 @@ function codeFor(cargo, uf) {
 
 function urlFor(uf, cargo) {
   const c = CARGOS[cargo];
-  const folder = cargo === 'presidente' ? 'br' : uf.toLowerCase();
+  const folder = uf.toLowerCase();
   const cod = codeFor(cargo, uf);
   const ele = String(c.ele).padStart(6, '0');
   return `${TSE}/${c.ele}/dados/${folder}/${folder}-c${cod}-e${ele}-u.json`;
@@ -118,17 +112,14 @@ module.exports = async (req, res) => {
   if (!CARGOS[cargo]) return res.status(400).json({ error: 'Cargo inválido' });
   if (uf && !UFS.includes(uf)) return res.status(400).json({ error: 'UF inválida' });
 
-  // Presidente é publicado em um único arquivo nacional (BR).
-  // Os demais cargos têm um arquivo por UF.
-  const requested = cargo === 'presidente' ? ['BR'] : (uf ? [uf] : UFS);
+  // O TSE disponibiliza o Presidente também por abrangência estadual.
+  // Isso permite alimentar o mapa por UF sem alterar a fonte oficial.
+  const requested = uf ? [uf] : UFS;
   const results = {};
   const errors = [];
 
   for (let i = 0; i < requested.length; i += 6) {
-    const batch = await Promise.all(requested.slice(i, i + 6).map(async u => {
-      const realUf = u === 'BR' ? 'BR' : u;
-      return readOne(realUf, cargo);
-    }));
+    const batch = await Promise.all(requested.slice(i, i + 6).map(u => readOne(u, cargo)));
     for (const item of batch) {
       if (item.data) results[item.uf] = item.data;
       else errors.push({ uf: item.uf, status: item.status, url: item.url });
@@ -158,9 +149,7 @@ module.exports = async (req, res) => {
 
     for (const c of d.candidates) {
       const key = c.number || `${c.name}|${c.party}`;
-      if (!candidates[key]) {
-        candidates[key] = { ...c, votes: 0, states: [] };
-      }
+      if (!candidates[key]) candidates[key] = { ...c, votes: 0, states: [] };
       candidates[key].votes += c.votes;
       if (!candidates[key].states.includes(state)) candidates[key].states.push(state);
       if (!candidates[key].photo && c.photo) candidates[key].photo = c.photo;
@@ -169,10 +158,7 @@ module.exports = async (req, res) => {
 
   const list = Object.values(candidates)
     .sort((a, b) => b.votes - a.votes)
-    .map(c => ({
-      ...c,
-      percent: valid ? (c.votes / valid) * 100 : c.percent
-    }));
+    .map(c => ({ ...c, percent: valid ? (c.votes / valid) * 100 : c.percent }));
 
   return res.status(200).json({
     source: 'TSE',
