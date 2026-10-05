@@ -21,7 +21,7 @@ function num(v) {
 function text(v) { return v === undefined || v === null ? '' : String(v).trim(); }
 function pct(v) { const n = num(v); return n > 100 ? n / 100 : n; }
 
-function parse(j, cargo, uf) {
+function parse(j, cargo, uf, mun='') {
   const s = j?.s || {}, v = j?.v || {}, e = j?.e || {};
   const candidates = [];
   for (const cg of (Array.isArray(j?.carg) ? j.carg : [])) {
@@ -33,7 +33,7 @@ function parse(j, cargo, uf) {
           const number = text(cd?.n);
           const party = text(pa?.sg || pa?.nm);
           const sqcand = text(cd?.sqcand);
-          const photoUf = uf.toLowerCase();
+          const photoUf = cargo === 'presidente' && !mun ? 'br' : uf.toLowerCase();
           candidates.push({
             name, number, party,
             votes: num(cd?.vap),
@@ -72,25 +72,41 @@ async function readOne(uf, cargo, mun='') {
   try {
     const r = await fetch(`${url}?nocache=${Date.now()}`, { cache:'no-store', headers:{accept:'application/json'} });
     if (!r.ok) return { uf, mun, data:null, status:r.status, url };
-    return { uf, mun, data:parse(await r.json(), cargo, uf), status:r.status, url };
+    return { uf, mun, data:parse(await r.json(), cargo, uf, mun), status:r.status, url };
   } catch (error) {
     return { uf, mun, data:null, status:0, url, error:String(error?.message || error) };
   }
 }
 
+// EA12: o TSE organiza o cadastro como UF (abr) -> municípios (mu).
+// Alguns arquivos usam "cd" para o código da UF, por isso não devemos
+// depender somente de campos chamados "uf"/"sigla".
 function findMunicipalities(node, out=[], seen=new Set(), ufHint='') {
   if (!node || typeof node !== 'object') return out;
-  if (Array.isArray(node)) { for (const x of node) findMunicipalities(x,out,seen,ufHint); return out; }
-  const uf = text(node.uf || node.sguf || node.sigla || node.cd_uf || ufHint).toUpperCase();
-  const code = text(node.cd || node.cdmun || node.cd_mun || node.codigo || node.cod || node.cmun || node.mun);
-  const name = text(node.nm || node.nome || node.nmun || node.municipio || node.descricao);
-  if (/^\d{5}$/.test(code) && name && (uf || /^[A-Z]{2}$/.test(text(node.uf)))) {
-    const key = `${uf}|${code}`;
-    if (!seen.has(key)) { seen.add(key); out.push({ code, name, uf }); }
+  if (Array.isArray(node)) {
+    for (const x of node) findMunicipalities(x, out, seen, ufHint);
+    return out;
   }
-  for (const [k,v] of Object.entries(node)) {
+
+  const explicitUf = text(node.uf || node.sguf || node.sigla || node.cd_uf).toUpperCase();
+  const nodeCd = text(node.cd || node.codigo || node.cod);
+  const inheritedUf = explicitUf || (/^[A-Z]{2}$/.test(nodeCd) ? nodeCd : '') || ufHint;
+
+  // Formato principal: objeto de município com código de 5 dígitos e nome.
+  const code = text(node.cdmun || node.cd_mun || node.cmun || node.mun || node.codigo_municipio || nodeCd);
+  const name = text(node.nm || node.nome || node.nmun || node.municipio || node.descricao);
+  if (/^\d{5}$/.test(code) && name && /^[A-Z]{2}$/.test(inheritedUf)) {
+    const key = `${inheritedUf}|${code}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push({ code, name, uf: inheritedUf });
+    }
+  }
+
+  for (const [k, v] of Object.entries(node)) {
     if (k === 'uf' || k === 'sguf' || k === 'sigla' || k === 'cd_uf') continue;
-    findMunicipalities(v,out,seen,uf || ufHint);
+    // Não usar campos de texto como nós recursivos; somente objetos/arrays.
+    if (v && typeof v === 'object') findMunicipalities(v, out, seen, inheritedUf);
   }
   return out;
 }
